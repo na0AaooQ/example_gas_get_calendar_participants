@@ -1,3 +1,5 @@
+"use strict";
+
 // Googleカレンダー予定の参加者(ゲスト)（オーナーを含む）を取得する
 function　confirmStartProcessing(messageText) {
   var res = Browser.msgBox(messageText, Browser.Buttons.OK_CANCEL);
@@ -10,7 +12,6 @@ function　confirmStartProcessing(messageText) {
     Browser.msgBox("処理を中止します。");
     return false;
   }
-
 }
 
 // Googleカレンダー予定の参加者のメールアドレス一覧を取得し、除外リストと組み合わせて、配信対象アドレス一覧を生成する
@@ -74,11 +75,14 @@ function makeDistributionlist() {
   var addressExclusion = "";
   var k = 2; // シートの2行目から処理対象とする
   var flgExclusion = false;
+
+  var i = 0;
   for ( i = 2; i <= sheetParticipant.getLastRow(); i++ ) {
     flgExclusion = false;
     addressParticipant = sheetParticipant.getRange(i, 1 , 1, 1).getDisplayValue();
     console.log("参加者リストのアドレス = [" + addressParticipant + "]");
 
+    var j = 0;
     for ( j = 2; j <= sheetExclusion.getLastRow(); j++ ) {
       addressExclusion = sheetExclusion.getRange(j, 1 , 1, 1).getDisplayValue();
 
@@ -109,6 +113,9 @@ function sendDistribution() {
   var sheetMailBody = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('配信メール文面');
 
   var addressDistribution = "";
+  var sendMailSubject = "";
+  var sendMailBody = "";
+  var i = 0;
   for ( i = 2; i <= sheetDistribution.getLastRow(); i++ ) {
     addressDistribution = sheetDistribution.getRange(i, 1, 1, 1).getDisplayValue();
     console.log("配信対象アドレス = [" + addressDistribution + "]");
@@ -121,7 +128,7 @@ function sendDistribution() {
     console.log(sendMailSubject);
     console.log(sendMailBody);
 
-    if (addressDistribution.match(/.+@.+\..+/))　{
+    if (addressDistribution.match(/.+@.+\..+/)) {
       sendMail(addressDistribution, sendMailSubject, sendMailBody);
     }
   }
