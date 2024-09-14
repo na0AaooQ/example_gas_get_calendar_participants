@@ -1,7 +1,7 @@
 # overview
 get Google Calendar participants and send reminder email.
 
-# example demo image
+# demo image
 
 <img width="600" alt="1" src="https://github.com/user-attachments/assets/af993b0a-25d3-4580-831b-6c576d8e24aa">
 
